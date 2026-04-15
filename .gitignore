@@ -1,0 +1,41 @@
+# Built application files
+*.apk
+*.aar
+*.ap_
+
+# Files for the ART/Dalvik VM
+*.dex
+
+# Java class files
+*.class
+
+# Generated files
+bin/
+gen/
+out/
+build/
+.gradle/
+local.properties
+
+# Gradle cache / wrapper download cache (keep wrapper jar + scripts)
+!gradle/wrapper/gradle-wrapper.jar
+!gradlew
+!gradlew.bat
+
+# Android Studio files
+*.iml
+.idea/
+*.iws
+*.ipr
+captures/
+.externalNativeBuild/
+.cxx/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
