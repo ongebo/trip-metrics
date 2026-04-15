@@ -170,7 +170,8 @@ class TripService : Service() {
     @Throws(SecurityException::class)
     private fun requestLocationUpdates() {
         val request = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1_000L)
-            .setMinUpdateDistanceMeters(0f)
+            // Filter out GPS jitter when stationary; 5 m threshold balances accuracy vs battery.
+            .setMinUpdateDistanceMeters(5f)
             .build()
         fusedLocationClient.requestLocationUpdates(request, locationCallback, mainLooper)
     }

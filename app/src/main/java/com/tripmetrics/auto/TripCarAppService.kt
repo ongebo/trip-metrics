@@ -11,8 +11,16 @@ import androidx.car.app.validation.HostValidator
 class TripCarAppService : CarAppService() {
 
     /**
-     * Allow all hosts during development.  For a production release replace with
-     * [HostValidator.Builder] configured with the actual host certificates.
+     * **Development only.** [HostValidator.ALLOW_ALL_HOSTS_VALIDATOR] accepts connections from
+     * any host without certificate verification.
+     *
+     * Before publishing to the Play Store, replace this with a properly configured
+     * [HostValidator.Builder] that pins the expected host certificates:
+     * ```kotlin
+     * HostValidator.Builder(applicationContext)
+     *     .addAllowedHost("com.google.android.projection.gearhead", R.array.hosts_allowlist_googlemobile)
+     *     .build()
+     * ```
      */
     override fun createHostValidator(): HostValidator = HostValidator.ALLOW_ALL_HOSTS_VALIDATOR
 
