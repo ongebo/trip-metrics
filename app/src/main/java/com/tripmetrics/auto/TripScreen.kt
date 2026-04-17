@@ -53,14 +53,14 @@ class TripScreen(carContext: CarContext) : Screen(carContext) {
         val itemList = ItemList.Builder()
             .addItem(
                 Row.Builder()
-                    .setTitle("Current Speed")
-                    .addText(formatSpeed(metrics.currentSpeedKmh))
+                    .setTitle("Average Speed")
+                    .addText(formatSpeed(metrics.averageSpeedKmh))
                     .build()
             )
             .addItem(
                 Row.Builder()
-                    .setTitle("Average Speed")
-                    .addText(formatSpeed(metrics.averageSpeedKmh))
+                    .setTitle("Current Speed")
+                    .addText(formatSpeed(metrics.currentSpeedKmh))
                     .build()
             )
             .addItem(
