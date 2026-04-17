@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Location permissions -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- Foreground service permission (required API 28+) -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- Foreground service location type (required API 34+) -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+
+    <!-- Internet not required; Car App Library local communication only -->
+
+    <application
+        android:allowBackup="true"
+        android:icon="@android:drawable/ic_menu_directions"
+        android:label="@string/app_name"
+        android:roundIcon="@android:drawable/ic_menu_directions"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.TripMetrics">
+
+        <!-- Phone UI -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Trip history screen -->
+        <activity
+            android:name=".HistoryActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <!-- GPS foreground service -->
+        <service
+            android:name=".TripService"
+            android:exported="false"
+            android:foregroundServiceType="location" />
+
+        <!-- Android Auto: Car App Library service -->
+        <service
+            android:name=".auto.TripCarAppService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="androidx.car.app.CarAppService" />
+                <category android:name="androidx.car.app.category.NAVIGATION" />
+            </intent-filter>
+            <!-- Minimum Car App API level this app supports -->
+            <meta-data
+                android:name="androidx.car.app.minCarApiLevel"
+                android:value="1" />
+        </service>
+
+        <!-- Declares Android Auto template feature to the head unit -->
+        <meta-data
+            android:name="com.google.android.gms.car.application"
+            android:resource="@xml/automotive_app_desc" />
+
+    </application>
+
+</manifest>

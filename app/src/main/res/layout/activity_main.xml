@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp">
+
+        <!-- App title -->
+        <TextView
+            android:id="@+id/tvAppTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:letterSpacing="0.15"
+            android:text="@string/app_name"
+            android:textAllCaps="true"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SmallSp" />
+
+        <!-- Status indicator -->
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/status_ready"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tvAppTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="SmallSp" />
+
+        <!-- ── Hero card: Average Speed ──────────────────────────────── -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardCurrentSpeed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:cardBackgroundColor="@color/card_background"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvAppTitle">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingVertical="32dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:letterSpacing="0.1"
+                    android:text="@string/label_average_speed"
+                    android:textAllCaps="true"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="11sp"
+                    tools:ignore="SmallSp" />
+
+                <TextView
+                    android:id="@+id/tvAverageSpeed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="sans-serif-thin"
+                    android:text="0.0 km/h"
+                    android:textColor="@color/accent_cyan"
+                    android:textSize="72sp"
+                    tools:ignore="SmallSp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- ── Stats card (shown while trip is running) ──────────────── -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardStats"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/card_background"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardCurrentSpeed">
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="16dp">
+
+                <!-- Current Speed cell -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:letterSpacing="0.08"
+                        android:text="@string/label_current_speed"
+                        android:textAllCaps="true"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="10sp"
+                        tools:ignore="SmallSp" />
+
+                    <TextView
+                        android:id="@+id/tvCurrentSpeed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="sans-serif"
+                        android:text="0.0 km/h"
+                        android:textColor="@color/text_primary"
+                        android:textSize="22sp" />
+                </LinearLayout>
+
+                <!-- Duration cell -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:letterSpacing="0.08"
+                        android:text="@string/label_duration"
+                        android:textAllCaps="true"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="10sp"
+                        tools:ignore="SmallSp" />
+
+                    <TextView
+                        android:id="@+id/tvDuration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="sans-serif"
+                        android:text="00:00"
+                        android:textColor="@color/text_primary"
+                        android:textSize="22sp" />
+                </LinearLayout>
+
+                <!-- Distance cell -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:letterSpacing="0.08"
+                        android:text="@string/label_distance"
+                        android:textAllCaps="true"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="10sp"
+                        tools:ignore="SmallSp" />
+
+                    <TextView
+                        android:id="@+id/tvDistance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="sans-serif"
+                        android:text="0 m"
+                        android:textColor="@color/text_primary"
+                        android:textSize="22sp" />
+                </LinearLayout>
+
+                <!-- Max Speed cell -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:letterSpacing="0.08"
+                        android:text="@string/label_max_speed"
+                        android:textAllCaps="true"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="10sp"
+                        tools:ignore="SmallSp" />
+
+                    <TextView
+                        android:id="@+id/tvMaxSpeed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="sans-serif"
+                        android:text="0.0 km/h"
+                        android:textColor="@color/text_primary"
+                        android:textSize="22sp" />
+                </LinearLayout>
+
+            </GridLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Group used to toggle stats card visibility -->
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/groupMetrics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="cardStats" />
+
+        <!-- ── Start / Stop button ───────────────────────────────────── -->
+        <Button
+            android:id="@+id/btnStartStop"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/start_green"
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="0.1"
+            android:text="@string/start_trip"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:cornerRadius="12dp"
+            app:layout_constraintBottom_toTopOf="@+id/btnHistory"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardStats"
+            app:layout_goneMarginTop="24dp" />
+
+        <!-- ── View History button ───────────────────────────────────── -->
+        <Button
+            android:id="@+id/btnHistory"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="8dp"
+            android:letterSpacing="0.08"
+            android:text="@string/view_history"
+            android:textColor="@color/accent_cyan"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnStartStop" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
