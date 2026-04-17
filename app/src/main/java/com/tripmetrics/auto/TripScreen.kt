@@ -14,10 +14,7 @@ import com.tripmetrics.TripService
 import com.tripmetrics.formatDistance
 import com.tripmetrics.formatDuration
 import com.tripmetrics.formatSpeed
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 
 /**
@@ -29,10 +26,8 @@ import kotlinx.coroutines.launch
  */
 class TripScreen(carContext: CarContext) : Screen(carContext) {
 
-    private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-
     init {
-        scope.launch {
+        lifecycleScope.launch {
             TripService.metrics.collect { invalidate() }
         }
     }
@@ -92,10 +87,5 @@ class TripScreen(carContext: CarContext) : Screen(carContext) {
                     .build()
             )
             .build()
-    }
-
-    override fun onDestroy() {
-        scope.cancel()
-        super.onDestroy()
     }
 }
