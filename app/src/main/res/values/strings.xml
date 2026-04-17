@@ -21,6 +21,18 @@
     <string name="permission_denied">Location permission is required to track your trip.</string>
     <string name="trip_saved_message">Trip saved! Distance: %1$s · Avg: %2$s</string>
 
+    <!-- Trip naming dialog -->
+    <string name="name_trip_title">Name your trip</string>
+    <string name="name_trip_hint">Trip name (optional)</string>
+    <string name="save">Save</string>
+    <string name="skip">Skip</string>
+
+    <!-- History screen -->
+    <string name="view_history">VIEW HISTORY</string>
+    <string name="history_title">Trip History</string>
+    <string name="no_trips_yet">No trips saved yet.</string>
+    <string name="unnamed_trip">Unnamed Trip</string>
+
     <!-- Notification channel -->
     <string name="notification_channel_name">Trip Metrics</string>
     <string name="notification_channel_desc">Shows your current trip metrics while driving</string>

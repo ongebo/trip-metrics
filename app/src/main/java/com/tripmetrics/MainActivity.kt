@@ -1,23 +1,24 @@
 package com.tripmetrics
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
-import android.widget.Toast
+import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.tripmetrics.databinding.ActivityMainBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-/**
- * Main phone activity.  Shows real-time trip metrics and a single Start / Stop button.
- */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         val granted = perms[Manifest.permission.ACCESS_FINE_LOCATION] == true
                 || perms[Manifest.permission.ACCESS_COARSE_LOCATION] == true
         if (granted) viewModel.startTrip()
-        else Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_LONG).show()
+        else android.widget.Toast.makeText(this, R.string.permission_denied, android.widget.Toast.LENGTH_LONG).show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,13 +43,20 @@ class MainActivity : AppCompatActivity() {
             else checkPermissionsAndStart()
         }
 
+        binding.btnHistory.setOnClickListener {
+            startActivity(Intent(this, HistoryActivity::class.java))
+        }
+
         lifecycleScope.launch {
             viewModel.metrics.collectLatest { updateUI(it) }
         }
 
         lifecycleScope.launch {
             viewModel.lastSavedTrip.collectLatest { record ->
-                record?.let { showSavedToast(it) }
+                if (record != null) {
+                    viewModel.clearLastSavedTrip()
+                    showNamingDialog(record)
+                }
             }
         }
     }
@@ -63,8 +71,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateUI(metrics: TripMetrics) {
-        binding.tvCurrentSpeed.text = formatSpeed(metrics.currentSpeedKmh)
         binding.tvAverageSpeed.text = formatSpeed(metrics.averageSpeedKmh)
+        binding.tvCurrentSpeed.text = formatSpeed(metrics.currentSpeedKmh)
         binding.tvDuration.text = formatDuration(metrics.durationSeconds)
         binding.tvDistance.text = formatDistance(metrics.distanceMeters)
         binding.tvMaxSpeed.text = formatSpeed(metrics.maxSpeedKmh)
@@ -84,12 +92,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showSavedToast(record: TripRecord) {
-        val msg = getString(
-            R.string.trip_saved_message,
-            formatDistance(record.distanceMeters),
-            formatSpeed(record.averageSpeedKmh)
-        )
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+    private fun showNamingDialog(record: TripRecord) {
+        val input = EditText(this).apply {
+            hint = getString(R.string.name_trip_hint)
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+            setPadding(64, 32, 64, 16)
+        }
+
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.name_trip_title)
+            .setView(input)
+            .setPositiveButton(R.string.save) { _, _ ->
+                val name = input.text.toString().trim()
+                if (name.isNotEmpty()) viewModel.updateTripName(record.id, name)
+            }
+            .setNegativeButton(R.string.skip, null)
+            .show()
     }
 }

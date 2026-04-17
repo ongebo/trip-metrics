@@ -19,6 +19,7 @@ data class TripMetrics(
  */
 data class TripRecord(
     val id: String,
+    val name: String = "",
     val startTimeMs: Long,
     val endTimeMs: Long,
     val durationSeconds: Long,

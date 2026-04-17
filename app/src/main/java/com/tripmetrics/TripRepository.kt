@@ -2,42 +2,32 @@ package com.tripmetrics
 
 import android.content.Context
 import com.google.gson.Gson
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import com.google.gson.reflect.TypeToken
 
-/**
- * Persists and retrieves [TripRecord]s as JSON files in the app's external files directory.
- *
- * Files are stored under `<externalFilesDir>/trips/trip_<timestamp>.json` so they are
- * readable by the user via a file-manager app while still being scoped to this application.
- */
-class TripRepository(private val context: Context) {
+class TripRepository(context: Context) {
 
+    private val prefs = context.applicationContext
+        .getSharedPreferences("trip_history", Context.MODE_PRIVATE)
     private val gson = Gson()
+    private val listType = object : TypeToken<List<TripRecord>>() {}.type
 
-    private val storageDir: File
-        get() = File(context.getExternalFilesDir(null), "trips").also { it.mkdirs() }
-
-    /** Serialise [record] to JSON and write it to a timestamped file. Returns the file. */
-    fun saveTrip(record: TripRecord): File {
-        val dateStr = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault())
-            .format(Date(record.startTimeMs))
-        val file = File(storageDir, "trip_$dateStr.json")
-        file.writeText(gson.toJson(record))
-        return file
+    fun saveTrip(record: TripRecord) {
+        val trips = loadAllTrips().toMutableList()
+        trips.add(0, record)
+        prefs.edit().putString(KEY_TRIPS, gson.toJson(trips)).apply()
     }
 
-    /** Load all persisted trips, sorted newest-first. */
+    fun updateTripName(id: String, name: String) {
+        val trips = loadAllTrips().map { if (it.id == id) it.copy(name = name) else it }
+        prefs.edit().putString(KEY_TRIPS, gson.toJson(trips)).apply()
+    }
+
     fun loadAllTrips(): List<TripRecord> {
-        val dir = storageDir
-        if (!dir.exists()) return emptyList()
-        return dir.listFiles { f -> f.extension == "json" }
-            ?.mapNotNull { file ->
-                runCatching { gson.fromJson(file.readText(), TripRecord::class.java) }.getOrNull()
-            }
-            ?.sortedByDescending { it.startTimeMs }
-            ?: emptyList()
+        val json = prefs.getString(KEY_TRIPS, null) ?: return emptyList()
+        return gson.fromJson(json, listType) ?: emptyList()
+    }
+
+    companion object {
+        private const val KEY_TRIPS = "trips"
     }
 }

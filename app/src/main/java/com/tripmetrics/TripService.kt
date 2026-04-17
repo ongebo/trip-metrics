@@ -59,6 +59,11 @@ class TripService : Service() {
                 Intent(context, TripService::class.java).setAction(ACTION_STOP)
             )
         }
+
+        /** Clears the last saved trip so the naming dialog doesn't reappear on config change. */
+        fun clearLastSavedTrip() {
+            _lastSavedTrip.value = null
+        }
     }
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient

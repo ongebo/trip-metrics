@@ -31,6 +31,12 @@
             </intent-filter>
         </activity>
 
+        <!-- Trip history screen -->
+        <activity
+            android:name=".HistoryActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
         <!-- GPS foreground service -->
         <service
             android:name=".TripService"

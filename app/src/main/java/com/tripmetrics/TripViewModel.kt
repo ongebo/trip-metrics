@@ -1,7 +1,6 @@
 package com.tripmetrics
 
 import android.app.Application
-import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
 import kotlinx.coroutines.flow.StateFlow
 
@@ -25,5 +24,13 @@ class TripViewModel(application: Application) : AndroidViewModel(application) {
 
     fun stopTrip() {
         TripService.stop(getApplication())
+    }
+
+    fun updateTripName(id: String, name: String) {
+        TripRepository(getApplication()).updateTripName(id, name)
+    }
+
+    fun clearLastSavedTrip() {
+        TripService.clearLastSavedTrip()
     }
 }
